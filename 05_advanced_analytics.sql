@@ -1,0 +1,88 @@
+-- Q20 — rank grades by risk exposure using ROW_NUMBER/RANK
+
+-- select grade,
+-- count(case when loan_status = 'Charged Off' then 1 end) as charge_off,
+-- count(case when loan_status in ('Charged Off','Fully Paid') then 1 end) as resolved_count,
+-- dense_rank() over (order by 
+-- round(count(case when loan_status = 'Charged Off' then 1 end) * 100 :: numeric / (select count(*) from loans where loan_status = 'Charged Off'),2) desc
+-- ) as risk_dense_rank,
+-- rank() over (order by 
+-- round(count(case when loan_status = 'Charged Off' then 1 end) * 100 :: numeric / (select count(*) from loans where loan_status = 'Charged Off'),2) desc
+-- ) as risk_rank,
+-- row_number() over (order by 
+-- round(count(case when loan_status = 'Charged Off' then 1 end) * 100 :: numeric / (select count(*) from loans where loan_status = 'Charged Off'),2) desc
+-- ) as risk_row_number
+-- from loans
+-- where loan_status in ('Fully Paid', 'Charged Off')
+-- group by grade
+
+-- Q21 — compare segment default rate to portfolio average, using window functions.
+
+-- SELECT 
+--     grade,
+--     chargeoff_count,
+--     resolved_count,
+--     ROUND(chargeoff_count * 100.0::NUMERIC / resolved_count, 2) AS grade_rate,
+-- 	round(sum(chargeoff_count) over () * 100 / sum(resolved_count) over (),2) as portfolio_avg_rate,
+-- 	ROUND((chargeoff_count * 100.0::NUMERIC / resolved_count) - 
+--     (SUM(chargeoff_count) OVER () * 100.0::NUMERIC / SUM(resolved_count) OVER ()), 2) AS rate_vs_avg
+-- FROM (
+-- select grade,
+-- count(case when loan_status = 'Charged Off' then 1 end) as chargeoff_count,
+-- count(case when loan_status in ('Charged Off','Fully Paid') then 1 end) as resolved_count
+-- from loans
+-- WHERE loan_status IN ('Charged Off', 'Fully Paid')
+-- GROUP BY grade
+-- ) as counts
+-- ORDER BY grade;
+
+-- Q22 — identify above-average risk segments
+
+-- select * from (
+-- SELECT 
+--     grade,
+--     chargeoff_count,
+--     resolved_count,
+--     ROUND(chargeoff_count * 100.0::NUMERIC / resolved_count, 2) AS grade_rate,
+-- 	round(sum(chargeoff_count) over () * 100 / sum(resolved_count) over (),2) as portfolio_avg_rate,
+-- 	ROUND((chargeoff_count * 100.0::NUMERIC / resolved_count) - 
+--     (SUM(chargeoff_count) OVER () * 100.0::NUMERIC / SUM(resolved_count) OVER ()), 2) AS rate_vs_avg
+-- FROM (
+-- select grade,
+-- count(case when loan_status = 'Charged Off' then 1 end) as chargeoff_count,
+-- count(case when loan_status in ('Charged Off','Fully Paid') then 1 end) as resolved_count
+-- from loans
+-- WHERE loan_status IN ('Charged Off', 'Fully Paid')
+-- GROUP BY grade
+-- ) as counts
+-- )
+-- where rate_vs_avg > 0
+-- ORDER BY rate_vs_avg desc;
+
+-- Q23 — Portfolio Risk Scorecard
+
+-- select grade,
+-- chargeoff_count,
+-- resolved_count,
+-- round(chargeoff_count * 100 :: numeric/ resolved_count,2) as portfolio_chargeoff_rate,
+-- round(sum(chargeoff_count) over () * 100 :: numeric/ (sum(resolved_count) over ()),2) as portfolio_avg_chargeoff_rate,
+-- round((chargeoff_count * 100 :: numeric/ resolved_count) 
+-- - (sum(chargeoff_count) over () * 100 :: numeric/ sum(resolved_count) over ()),2) as avg_vs_rate,
+-- case 
+-- when round(chargeoff_count * 100 :: numeric/ resolved_count,2) < 14.58 then 'Low Risk' 
+-- when round(chargeoff_count * 100 :: numeric/ resolved_count,2) < 20 then 'Moderate Risk'
+-- else 'High Risk'
+-- end as risk_band
+-- from (
+-- select grade,
+-- count(case when loan_status = 'Charged Off' then 1 end) as chargeoff_count,
+-- count(case when loan_status in ('Charged Off','Fully Paid') then 1 end) as resolved_count
+-- from loans 
+-- where loan_status in ('Charged Off','Fully Paid')
+-- group by grade
+-- ) as count
+-- order by avg_vs_rate
+
+-- select round(avg(int_rate) :: numeric ,2) as avg_portfolio_int_rate
+-- from loans
+-- where loan_status in ('Fully Paid','Charged Off');
