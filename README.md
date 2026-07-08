@@ -1,10 +1,16 @@
-# Loan Default Risk Analysis: A 39K-Loan SQL Deep Dive (LendingClub)
+# LendingClub Loan Default Risk Analysis
 
-## Objective
+### Executive Summary
 
-This project analyzes 39,715 consumer loans from LendingClub using PostgreSQL to identify what actually drives loan default (charge-off) risk — and, more importantly, where that risk sits once you separate **rate** (how risky a segment is per loan) from **exposure** (how much of the lender's total dollar losses that segment actually causes). The analysis moves through 23 questions across five stages: portfolio overview, charge-off analysis by segment, risk driver testing, exposure/contribution analysis, and advanced SQL (window functions, ranking, scorecard construction).
+- Analysed **39,715** LendingClub loans using PostgreSQL.
+- Answered **23** business questions covering portfolio performance and credit risk.
+- Built an executive Power BI scorecard to validate SQL findings.
+- Identified interest rate, loan term and portfolio concentration as the strongest default drivers.
+- Demonstrated advanced SQL using CTEs, window functions, subqueries, CASE expressions and ranking functions.
+  
+## Dashboard Screenshot
 
-The core question this project answers: **if you were a risk manager at this lender, where would you actually focus your attention — and would that be the same place your intuition tells you to look?**
+<img width="1165" height="656" alt="Screenshot 2026-07-08 150337" src="https://github.com/user-attachments/assets/77dc9347-e83d-44ee-b170-966475d4c895" />
 
 ## Dataset
 
@@ -58,6 +64,20 @@ To complement the SQL analysis, I built a Power BI dashboard (`/dashboard/`) cov
 Each bug was caught by comparing the dashboard's output directly against the SQL results above — a useful discipline for validating any BI layer built on top of verified query logic, rather than trusting visual output at face value.
 
 *(See `/dashboard/scorecard.pbix` and the accompanying screenshot for the finished, cross-validated dashboard.)*
+
+## Skills Demonstrated
+
+• PostgreSQL
+• SQL
+• Window Functions
+• CTEs
+• CASE WHEN
+• Subqueries
+• Data Aggregation
+• Power BI
+• DAX
+• Business Analytics
+• Credit Risk Analysis
 
 ## SQL Techniques Used
 
