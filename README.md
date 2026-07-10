@@ -104,4 +104,4 @@ Each bug was caught by comparing the dashboard's output directly against the SQL
 ## Author
 
 Asif Farook Khaja Moideen — MSc Data Science, University of Greenwich
-[[LinkedIn]](https://www.linkedin.com/in/asif-farook-khaja-moideen-77409317a/) · [[GitHub]](https://github.com/farookasif19016/lendingclub-sql-risk-analysis)
+[[LinkedIn]](https://www.linkedin.com/in/asif-farook-khaja-moideen-77409317a/) · [[GitHub]](https://github.com/farookasif19016))
